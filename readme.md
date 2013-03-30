@@ -54,7 +54,7 @@ project
     Gruntfile.js
     package.json
     config.rb # compass config file for grunt
-    _compass.rb # compass config for jekyll compass generator
+    _compass.rb # compass config for jekyll plugin compass generator
 ```
 
 5. Lastly make sure your compass config files are correct
