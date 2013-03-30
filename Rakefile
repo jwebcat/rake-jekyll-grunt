@@ -3,17 +3,19 @@ require "stringex"
 
 ## -- Rsync Deploy config -- ##
 # Be sure your public key is listed in your server's ~/.ssh/authorized_keys file
-ssh_user       = "user@domain.com"
-ssh_port       = "22"
-document_root  = "~/website.com/"
-rsync_delete   = false
-rsync_args     = ""  # Any extra arguments to pass to rsync
-deploy_default = "push"
+ssh_user        = "user@domain.com"
+ssh_port        = "22"
+document_root   = "~/website.com/"
+rsync_delete    = false
+rsync_args      = ""  # Any extra arguments to pass to rsync
+deploy_default  = "push"
 
 # This will be configured for you when you run config_deploy
-deploy_branch  = "gh-pages"
-master_branch  = "master"
+deploy_branch   = "gh-pages"
+master_branch   = "master"
 
+# Editor of choice
+choice_editor   = "subl"
 
 ## -- Misc Configs -- ##
 
@@ -23,7 +25,7 @@ deploy_dir      = "_deploy"   # deploy directory (for Github pages deployment)
 stash_dir       = "_stash"    # directory to stash posts for speedy generation
 posts_dir       = "_posts"    # directory for blog files
 sass_dir        = "_sass" # directory for sass files
-stylesheets_dir = "_site/assets/stylesheets" # directory for css files
+stylesheets_dir = "_site/assets/css" # directory for css files
 # themes_dir      = ".themes"   # directory for blog files
 new_post_ext    = "md"  # default new post file extension when using the new_post task
 new_page_ext    = "md"  # default new page file extension when using the new_page task
@@ -63,7 +65,7 @@ end
 desc "preview the site in a web browser"
 task :preview do
   raise "### you haven't made the jekyll body. make it happen clone jekyll roots from github" unless File.directory?(source_dir)
-  puts "Starting to watch source with Jekyll and grunt with compass baked in. Starting Live reload and connect on port 8000"
+  puts "Starting to watch source with Jekyll and grunt with compass baked in. Starting Live reload server on port 9000"
   system "compass compile --css-dir #{source_dir}/#{stylesheets_dir} --sass-dir #{source_dir}/#{sass_dir}" unless File.exist?("#{source_dir}/#{stylesheets_dir}/styles.css")
   jekyllPid = Process.spawn("jekyll build")
   livereloadPid = Process.spawn({"GRUNT_ENV"=>"grunt"}, "grunt")
@@ -76,7 +78,7 @@ task :preview do
   [jekyllPid, livereloadPid].each { |pid| Process.wait(pid) }
 end
 
-desc "preview the site with grunt and live reload in a web browser go see on port 9000"
+desc "preview the site with grunt and live reload in a web browser go see localhost on port 8000"
 task :livegrunt do
   raise "### you haven't made the jekyll body. make it happen clone jekyll roots from github" unless File.directory?(source_dir)
   puts "cooking the sass with compass ... bakin jekyll nice and toasty"
@@ -120,7 +122,7 @@ end
 
 # usage rake iso_post[my-iso-post] or rake iso_post['my iso post'] or rake iso_post (defaults to "new-post")
 desc "Begin a new post in #{source_dir}/#{posts_dir}"
-task :iso_post, :title do |t, args|
+multitask :iso_post, :title do |t, args|
   if args.title
     title = args.title
   else
@@ -144,19 +146,19 @@ task :iso_post, :title do |t, args|
   file_name = "#{filename}"
   Rake::Task[:isolate].invoke(file_name)
   puts "running isolate on " + file_name
-  puts "your post ... we got " + file_name + " isolated and baked fer cookin..."
-  exec "subl #{filename}"
+  puts "your post ... we got " + file_name + " isolated and baked and cookin..."
+  exec "#{choice_editor} #{filename}"
 end
 
 # usage rake new_page[my-new-page] or rake new_page[my-new-page.html] or rake new_page (defaults to "new-page.markdown")
-desc "Create a new page in #{source_dir}/(filename)/index.#{new_page_ext}"
+desc "Create a new page in (filename)/index.#{new_page_ext}"
 task :new_page, :filename do |t, args|
   args.with_defaults(:filename => 'new-page')
-  page_dir = [source_dir]
+  page_dir = [Dir.pwd]
   if args.filename.downcase =~ /(^.+\/)?(.+)/
     filename, dot, extension = $2.rpartition('.').reject(&:empty?)         # Get filename and extension
     title = filename
-    page_dir.concat($1.downcase.sub(/^\//, '').split('/')) unless $1.nil?  # Add path to page_dir Array
+    page_dir.concat($1.downcase.sub(/^\//, '')) unless $1.nil?  # Add path to page_dir Array
     if extension.nil?
       page_dir << filename
       filename = "index"
@@ -178,7 +180,6 @@ task :new_page, :filename do |t, args|
       page.puts "date: #{Time.now.strftime('%Y-%m-%d %H:%M')}"
       page.puts "comments: true"
       page.puts "sharing: true"
-      page.puts "footer: true"
       page.puts "---"
     end
   else
@@ -241,6 +242,21 @@ task :push_core do
     puts "\n## Github push to master complete, go have a bit of fun, you deserve it "
 end
 
+desc "set master as default merge and push for origin/master"
+task :master_config_push do
+  puts "adding all files in master to stage"
+  system "git add ."
+    system "git add -u"
+    puts "\n## Commiting: Site updated at #{Time.now.utc}"
+    message = "Site commited updated at #{Time.now.utc}"
+    system "git commit -m \"#{message}\""
+    puts "\n## Configuring origin/master and master to track eachother by default... how fun"
+    system "git config branch.#{master_branch}.remote origin"
+    puts "\n## Pushing Commit to master on github"
+    system "git push origin #{master_branch} --force"
+    puts "Jekyll has been baked nicely and your commit has been served to github thanks for playing along"
+end
+
 desc "copy dot files for deployment"
 task :copydot, :source, :dest do |t, args|
   FileList["#{args.source}/**/.*"].exclude("**/.", "**/..", "**/.DS_Store", "**/._*").each do |file|
@@ -271,9 +287,9 @@ multitask :push do
     puts "\n## Commiting: Site updated at #{Time.now.utc}"
     message = "Site updated at #{Time.now.utc}"
     system "git commit -m \"#{message}\""
-    puts "\n## Pushing generated #{deploy_dir} website"
+    puts "\n## Pushing baked #{deploy_dir} website"
     system "git push origin #{deploy_branch} --force"
-    puts "\n## Github Pages deploy complete"
+    puts "\n## Github Pages deploy complete ...  go and enjoy yourself some "
   end
 end
 
@@ -324,9 +340,9 @@ task :setup_github_pages, :repo do |t, args|
   user = repo_url.match(/:([^\/]+)/)[1]
   branch = (repo_url.match(/\/[\w-]+\.github\.com/).nil?) ? 'gh-pages' : 'master'
   project = (branch == 'gh-pages') ? repo_url.match(/\/([^\.]+)/)[1] : ''
-  unless (`git remote -v` =~ /origin.+?hub(?:\.git)?/).nil?
+  unless (`git remote -v` =~ /origin.+?source(?:\.git)?/).nil?
     # If octopress is still the origin remote (from cloning) rename it to octopress
-    system "git remote rename origin hub"
+    system "git remote rename origin source"
     if branch == 'master'
       # If this is a user/organization pages repository, add the correct origin remote
       # and checkout the source branch for committing changes to the blog source.
