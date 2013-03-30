@@ -150,7 +150,7 @@ multitask :iso_post, :title do |t, args|
   exec "#{choice_editor} #{filename}"
 end
 
-# usage rake new_page[my-new-page] or rake new_page[my-new-page.html] or rake new_page (defaults to "new-page.markdown")
+# usage rake new_page[my-new-page] or rake new_page[my-new-page.html] or rake new_page (defaults to "new-page.md")
 desc "Create a new page in (filename)/index.#{new_page_ext}"
 task :new_page, :filename do |t, args|
   args.with_defaults(:filename => 'new-page')
@@ -242,7 +242,7 @@ task :push_core do
     puts "\n## Github push to master complete, go have a bit of fun, you deserve it "
 end
 
-desc "set master as default merge and push for origin/master"
+desc "set master as default merge and push for origin/master and push to github"
 multitask :master_config_push do
   branch = "git symbolic-ref --short HEAD 2> /dev/null"
   if branch == "#{master_branch}"
@@ -258,7 +258,7 @@ multitask :master_config_push do
       system "git push origin #{master_branch} --force"
       puts "\n##your changes have been baked in nicely and your commit has been served to github thanks for playing along"
   else
-    puts "\n## Stashing Changes in current branch"
+    puts "\n## Stashing any changes in current branch"
     system "git stash"
     puts "\n## Checking out Master Branch"
     system "git checkout master"
