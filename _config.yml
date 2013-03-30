@@ -1,0 +1,29 @@
+name: "jwebcat"
+description: "A Nicely Baked Jekyll Blog"
+
+
+url: http://jwebcat.github.com/octorake-jekyll
+
+paginate: 10
+exclude: [node_modules]
+
+markdown: kramdown
+permalink: pretty
+pygments: true
+
+redcarpet:
+  extensions: ["no_intra_emphasis", "fenced_code_blocks", "autolink", "strikethrough", "superscript", "with_toc_data"]
+
+kramdown:
+  auto_ids: true,
+  footnote_nr: 1
+  entity_output: as_char
+  toc_levels: 1..6
+  use_coderay: false
+
+  coderay:
+    coderay_wrap: pre
+    coderay_line_numbers: table
+    coderay_line_numbers_start: 1
+    coderay_tab_width: 4
+    coderay_bold_every: 10

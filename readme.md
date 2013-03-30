@@ -48,7 +48,16 @@ project
     _plugins
         compass.rb
         prism.rb
+    node_modules/
+    _config.yml
     Rakefile
     Gruntfile.js
     package.json
-    node_modules
+    config.rb # compass config file for grunt
+    _compass.rb # compass config for jekyll compass generator
+```
+
+5. Lastly make sure your compass config files are correct
+
+- You should be good to go.
+
