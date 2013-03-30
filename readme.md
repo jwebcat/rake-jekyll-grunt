@@ -1,4 +1,4 @@
-## rake-jekyll-grunt - :a_whole_new_kind_of_beast => do
+## rake-jekyll-grunt -` :a_whole_new_kind_of_beast => :spawn do`
 
 
 - Usage
@@ -57,7 +57,40 @@ project
     _compass.rb # compass config for jekyll plugin compass generator
 ```
 
-5. Lastly make sure your compass config files are correct
-
+5. Lastly make sure your compass config.rb files, your _compass.rb, and _config.yml for jekyll are in the right place
 - You should be good to go.
 
+## You can just run the rake preview task by using
+
+```
+$ grunt
+```
+
+- Which will run the configured default grunt task in Gruntfile.js
+
+## TODO
+
+- fix rake new_page task which is just a bit broken.
+
+## Attribution
+
+- Thanks for all my knowledge I compiled from the brains of the following geniuses:
+- @mattbanks @parkr @zenshin @thanpolas @imathis and so many more of you. Thanks a Million.
+
+## License
+
+- DWTFYWL License
+DO Whatever The F%$# you would like License.
+You just do whatever the F&%$ you like.
+
+## Contributing
+
+- If you would like to contribute your tasks or make these better:
+
+1. Fork this project on github
+
+2. Make a feature branch and hack
+
+3. Send a PR (Pull Request)
+
+- Enjoy :)
