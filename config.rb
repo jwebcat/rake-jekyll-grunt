@@ -1,13 +1,12 @@
-require 'bootstrap-sass'
 # Require any additional compass plugins here.
 
 
 # Set this to the root of your project when deployed:
 http_path = "/"
-css_dir = "_site/assets/stylesheets"
 sass_dir = "_sass"
-images_dir = "assets/images"
+css_dir = "_site/assets/stylesheets"
 javascripts_dir = "assets/javascripts"
+images_dir = "assets/images"
 fonts_dir = "assets/fonts"
 
 # You can select your preferred output style here (can be overridden via the command line):

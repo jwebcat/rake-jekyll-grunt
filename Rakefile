@@ -15,7 +15,7 @@ deploy_branch   = "gh-pages"
 master_branch   = "master"
 
 # Editor of choice
-choice_editor   = "subl"
+choice_editor   = "subl "
 
 ## -- Misc Configs -- ##
 
@@ -118,6 +118,8 @@ task :new_post, :title do |t, args|
     post.puts "categories: "
     post.puts "---"
   end
+  puts "your post ... we got " + filename + " baked and ready to hack..."
+  exec "#{choice_editor} #{filename}"
 end
 
 # usage rake iso_post[my-iso-post] or rake iso_post['my iso post'] or rake iso_post (defaults to "new-post")
@@ -146,25 +148,25 @@ multitask :iso_post, :title do |t, args|
   file_name = "#{filename}"
   Rake::Task[:isolate].invoke(file_name)
   puts "running isolate on " + file_name
-  puts "your post ... we got " + file_name + " isolated and baked and cookin..."
+  puts "\n## Ok ... we got " + file_name + " isolated ... baked and ready for hacking..."
   exec "#{choice_editor} #{filename}"
 end
 
-# usage rake new_page[my-new-page] or rake new_page[my-new-page.html] or rake new_page (defaults to "new-page.md")
+# usage rake new_page["my-new-page"] usage rake new_page['my-new-page'] # READ THIS use dashes in your name or you will create a dir with spaces. or rake new_page["my-new-page.html"] or rake new_page (defaults to "new-page.md")
 desc "Create a new page in (filename)/index.#{new_page_ext}"
 task :new_page, :filename do |t, args|
   args.with_defaults(:filename => 'new-page')
-  page_dir = [Dir.pwd]
+  filename = "#{filename}"
+  page_dir = [Dir.getwd]
   if args.filename.downcase =~ /(^.+\/)?(.+)/
     filename, dot, extension = $2.rpartition('.').reject(&:empty?)         # Get filename and extension
     title = filename
-    page_dir.concat($1.downcase.sub(/^\//, '')) unless $1.nil?  # Add path to page_dir Array
     if extension.nil?
       page_dir << filename
       filename = "index"
     end
     extension ||= new_page_ext
-    page_dir = page_dir.map! { |d| d = d.to_url }.join('/')                # Sanitize path
+    page_dir = page_dir.map! { |d| d = d }.join('/')                # Sanitize path
     filename = filename.downcase.to_url
 
     mkdir_p page_dir
@@ -182,16 +184,24 @@ task :new_page, :filename do |t, args|
       page.puts "sharing: true"
       page.puts "---"
     end
+    puts "\n## we created your page dir ... and we got " + file + " baked and ready for cookin..."
+    exec "#{choice_editor} #{file}"
   else
     puts "Syntax error: #{args.filename} contains unsupported characters"
   end
 end
 
-# usage rake isolate[my-post]
+# usage rake isolate[my-cool-post] can be partial name of a file has to be at least two letters
 
 desc "Move all other posts than the one currently being worked on to a temporary stash location (stash) so regenerating the site happens much more quickly."
 task :isolate, :filename do |t, args|
+  if args.filename
+    filename = args.filename
+  else
+    filename = get_stdin("Enter the title of the post you want to put in isolation with dashes: ")
+  end
   stash_dir = "#{source_dir}/#{stash_dir}"
+  filename = "#{filename}"
   FileUtils.mkdir(stash_dir) unless File.exist?(stash_dir)
   Dir.glob("#{source_dir}/#{posts_dir}/*.*") do |post|
     FileUtils.mv post, stash_dir unless post.include?(args.filename)
@@ -230,20 +240,43 @@ task :gen_deploy => [:integrate, :generate, :deploy] do
 end
 
 desc "commit core source files on master and push to github master"
-task :push_core do
-  puts "## adding all files to stage "
-  system "git add ."
-    system "git add -u"
-    puts "\n## Commiting: Site updated at #{Time.now.utc}"
-    message = "Site updated at #{Time.now.utc}"
-    system "git commit -m \"#{message}\""
-    puts "\n## Pushing commit to master on github"
-    system "git push origin #{master_branch} --force"
-    puts "\n## Github push to master complete, go have a bit of fun, you deserve it "
+task :push_master do
+  branch = "git symbolic-ref --short HEAD 2> /dev/null"
+  if branch == "#{master_branch}"
+    puts "adding all files in master to stage"
+    system "git add ."
+      system "git add -u"
+      puts "\n## Commiting: Site updated at #{Time.now.utc}"
+      message = "Site commited updated at #{Time.now.utc}"
+      system "git commit -m \"#{message}\""
+      puts "\n## Pushing Commit to master on github"
+      system "git push origin #{master_branch} --force"
+      puts "\n##your changes have been baked in nicely and your commit has been served to github thanks for playing along"
+  else
+    puts "\n## Stashing any changes in current branch"
+    system "git stash"
+    puts "\n## Checking out Master Branch"
+    system "git checkout master"
+    puts "adding all files in master to stage"
+    system "git add ."
+      system "git add -u"
+      puts "\n## Commiting: Site updated at #{Time.now.utc}"
+      message = "Site commited updated at #{Time.now.utc}"
+      system "git commit -m \"#{message}\""
+      puts "\n## Configuring origin/master and master to track eachother by default... how fun"
+      system "git config branch.#{master_branch}.remote origin"
+      puts "\n## Pushing Commit to master on github"
+      system "git push origin #{master_branch} --force"
+      puts "\n## Switching back to the branch you were on"
+      system "git checkout -"
+      puts "\n## Popping any stashed changes"
+      system "git stash pop"
+      puts "\n##your changes have been baked in nicely and your commit has been served to github thanks for playing along"
+  end
 end
 
 desc "set master as default merge and push for origin/master and push to github"
-multitask :master_config_push do
+task :master_config_push do
   branch = "git symbolic-ref --short HEAD 2> /dev/null"
   if branch == "#{master_branch}"
     puts "adding all files in master to stage"
