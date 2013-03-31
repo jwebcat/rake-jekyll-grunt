@@ -70,15 +70,12 @@ module.exports = function(grunt) {
                     sourceMap: 'assets/js/map/source-map.js'
                 },
                 files: {
-                    'assets/javascripts/plugins.min.js': [
-                        'assets/javascripts/bootstrap-*.js',
+                    'assets/js/app.min.js': [
+                        'assets/js/*.js',
                     ],
-                    'assets/js/main.min.js': [
-                        'assets/javascripts/prism*.js'
+                    'assets/js/prism.min.js': [
+                        'assets/js/prism.js'
                     ],
-                    'assets/js/donuts.min.js': [
-                        'assets/javascripts/donuts*.js'
-                    ]
                 }
             }
         },
@@ -122,9 +119,9 @@ module.exports = function(grunt) {
             jekyll: {
                 files: [
                   // capture all except css - add your own
-                  '*.html', '*.yml', 'assets/javascripts/**.js',
+                  '*.html', '*.yml', 'assets/js/**.js',
                   '_posts/**', '_includes/**', '*.json',
-                  'assets/images/**', 'compass/**', '*.md',
+                  'assets/images/**', '*.md', '*.mdown',
                   '_layouts/**', '_plugins/**', '*.markdown'
                   ],
                 tasks: ['shell:jekyll', 'livereload']
@@ -132,9 +129,9 @@ module.exports = function(grunt) {
             watchjekyll: {
                 files: [
                   // capture all except css - add your own
-                  '*.html', '*.yml', 'assets/javascripts/**.js',
+                  '*.html', '*.yml', 'assets/js/**.js',
                   '_posts/**', '_includes/**', '*.json',
-                  'assets/images/**', 'compass/**', '*.md',
+                  'assets/images/**', '*.mdown', '*.md',
                   '_layouts/**', '_plugins/**', '*.markdown'
                   ],
                 tasks: ['shell:jekyll']
