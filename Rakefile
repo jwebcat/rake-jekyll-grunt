@@ -152,15 +152,15 @@ multitask :iso_post, :title do |t, args|
   exec "#{choice_editor} #{filename}"
 end
 
-# usage rake new_page[my-new-page] or rake new_page[my-new-page.html] or rake new_page (defaults to "new-page.md")
+# usage rake new_page["my-new-page"] usage rake new_page['my-new-page'] # READ THIS use dashes in your name ro you will create a dir with spaces. or rake new_page["my-new-page.html"] or rake new_page (defaults to "new-page.md")
 desc "Create a new page in (filename)/index.#{new_page_ext}"
 task :new_page, :filename do |t, args|
   args.with_defaults(:filename => 'new-page')
+  filename = "#{filename}"
   page_dir = [Dir.getwd]
   if args.filename.downcase =~ /(^.+\/)?(.+)/
     filename, dot, extension = $2.rpartition('.').reject(&:empty?)         # Get filename and extension
     title = filename
-    #page_dir.concat($1.downcase.sub(/^\//, '').gsub(%r!slash-!, "")) unless $1.nil?  # Add path to page_dir Array
     if extension.nil?
       page_dir << filename
       filename = "index"
@@ -191,7 +191,7 @@ task :new_page, :filename do |t, args|
   end
 end
 
-# usage rake isolate[my-post] can be partial name of a file
+# usage rake isolate[my-cool-post] can be partial name of a file has to be at least two letters
 
 desc "Move all other posts than the one currently being worked on to a temporary stash location (stash) so regenerating the site happens much more quickly."
 task :isolate, :filename do |t, args|
