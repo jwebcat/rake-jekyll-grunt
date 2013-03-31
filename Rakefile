@@ -152,7 +152,7 @@ multitask :iso_post, :title do |t, args|
   exec "#{choice_editor} #{filename}"
 end
 
-# usage rake new_page["my-new-page"] usage rake new_page['my-new-page'] # READ THIS use dashes in your name ro you will create a dir with spaces. or rake new_page["my-new-page.html"] or rake new_page (defaults to "new-page.md")
+# usage rake new_page["my-new-page"] usage rake new_page['my-new-page'] # READ THIS use dashes in your name or you will create a dir with spaces. or rake new_page["my-new-page.html"] or rake new_page (defaults to "new-page.md")
 desc "Create a new page in (filename)/index.#{new_page_ext}"
 task :new_page, :filename do |t, args|
   args.with_defaults(:filename => 'new-page')
