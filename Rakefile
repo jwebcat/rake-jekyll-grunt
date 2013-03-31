@@ -239,18 +239,16 @@ desc "Generate website and deploy"
 task :gen_deploy => [:integrate, :generate, :deploy] do
 end
 
-desc "commit core source files on master and push to github master"
+desc "commit changes to core source files on master and push to github master"
 task :push_master do
     puts "\n## Checking out Master Branch"
     system "git checkout master"
-    puts "adding all files in master to stage"
+    puts "adding all changes in master to stage"
     system "git add ."
       system "git add -u"
       puts "\n## Commiting: Site updated at #{Time.now.utc}"
-      message = "Site commited updated at #{Time.now.utc}"
+      message = "changes to gh pages commited using rake updated at #{Time.now.utc}"
       system "git commit -m \"#{message}\""
-      puts "\n## Configuring origin/master and master to track eachother by default... how fun"
-      system "git config branch.#{master_branch}.remote origin"
       puts "\n## Pushing Commit to master on github"
       system "git push origin #{master_branch} --force"
       puts "\n## Switching back to the branch you were on"
