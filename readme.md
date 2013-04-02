@@ -1,6 +1,6 @@
 ## rake-jekyll-grunt -` :a_whole_new_kind_of_beast => :awaken do`
 
-## This is the Rakefile from Octopress with some Special Sauce just for Jekyll.
+### This is the Rakefile from Octopress with some Special Sauce just for Jekyll.
 
 - Thanks to @imathis for making most of the rakefile, which was configured for octopress, and I just hacked for use with Jekyll
 
@@ -130,7 +130,7 @@ rake setup_github_pages[repo]  # Set up _deploy folder and deploy branch fo...
 rake watch                     # Watch the site and regenerate when it changes
 ```
 
-## The new ones are `rake iso_post` and `rake list_post`
+### The most notable new ones are `rake iso_post`, `rake list_post`, and `rake live_grunt`
 
 ```
 $ rake iso_post               # will create a new post then isolate it and open it in Sublime Text 2
@@ -156,10 +156,10 @@ $ grunt
 
 
 
-## Attribution and Many Thanks go to:
+## Attribution and Many Many Thanks go to:
 
-- Thanks for all my knowledge I compiled from the brains of the following geniuses:
-- @mattbanks @parkr @zenshin @thanpolas @imathis and so many more of you. Thanks a Million.
+-  A Special Thanks for all my knowledge I compiled from the brains of the following geniuses:
+-  @mattbanks @parkr @zenshin @thanpolas @imathis @chriseppstein and so many more of you. Thanks a Million.
 
 ## License
 
