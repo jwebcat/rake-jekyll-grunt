@@ -24,7 +24,7 @@ module.exports = function(grunt) {
                     middleware: function (connect) {
                         return [
                             lrSnippet,
-                            mountFolder(connect, '_site')
+                            mountFolder(connect, '_site')  // live reload is smoother when we just have it watch _site dir only
                         ];
                     }
                 }
@@ -67,13 +67,15 @@ module.exports = function(grunt) {
         uglify: {
             dist: {
                 options: {
-                    sourceMap: 'assets/js/map/source-map.js'
+                    sourceMap: 'assets/js/map/source-map.js'    // this is the source map of all the files yoyu feed uglify
                 },
-                files: {
-                    'assets/js/app.min.js': [
-                        'assets/js/*.js',
-                    ],
-                    'assets/js/prism.min.js': [
+                // files: {
+                //     'assets/js/app.min.js': [                // this file will be a concatenated, minified file of all the .js files in the array
+                //         'assets/js/oneFile.js',              // using this pattern you can concatenate many .js files into one file.
+                //         'assets/js/otherFile.js',
+                //         'assets/js/yetAnotherFile.js',
+                //     ],
+                    'assets/js/prism.min.js': [                 // this is the minified file of the file in the array
                         'assets/js/prism.js'
                     ],
                 }
