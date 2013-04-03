@@ -69,12 +69,7 @@ module.exports = function(grunt) {
                 options: {
                     sourceMap: 'assets/js/map/source-map.js'    // this is the source map of all the files yoyu feed uglify
                 },
-                // files: {
-                //     'assets/js/app.min.js': [                // this file will be a concatenated, minified file of all the .js files in the array
-                //         'assets/js/oneFile.js',              // using this pattern you can concatenate many .js files into one file.
-                //         'assets/js/otherFile.js',
-                //         'assets/js/yetAnotherFile.js',
-                //     ],
+                files: {
                     'assets/js/prism.min.js': [                 // this is the minified file of the file in the array
                         'assets/js/prism.js'
                     ],
