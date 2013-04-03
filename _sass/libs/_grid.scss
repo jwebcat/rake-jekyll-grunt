@@ -1,14 +1,14 @@
 /**
  * Profound Grid
- * 
- * Built in Sass (SCSS) this responsive/adaptive grid supports both fixed and fluid layouts, 
+ *
+ * Built in Sass (SCSS) this responsive/adaptive grid supports both fixed and fluid layouts,
  * relative and fixed gutters, as well as your choice of semantic markup or generic '.grid-x' classes.
- * 
+ *
  * The biggest difference to other grid systems is the use of negative margins for column
  * placements, avoiding the subpixel rounding issues that usually break/uglify fluid layouts
  * in some browsers.
- * 
- * Nested columns are supported too, without having to reset the grid on each level. 
+ *
+ * Nested columns are supported too, without having to reset the grid on each level.
  *
  * Credits/Inspiration:
  * -------------------
@@ -18,7 +18,7 @@
  *
  * @author Profound Creative Studio
  * @url http://www.profoundgrid.com
- * @url http://www.weareprofound.com 
+ * @url http://www.weareprofound.com
  */
 @import "compass/utilities/general/clearfix";
 
@@ -27,7 +27,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 $total_columns: 	12;			// 				//
-$total_width:		960px; 		// px|100% 		// px = fixed, 100% = fluid
+$total_width:		100%; 		// px|100% 		// px = fixed, 100% = fluid
 $gutter_width:		1%;			// px|%			// px = fixed, % = fluid
 $container_margin:	1%;			// auto|px|%	//
 
@@ -80,7 +80,7 @@ $class_push:		'push';		//				//
  * Establish the grid-containing element.
  */
 @mixin container(){
-	width: container_width(); 
+	width: container_width();
 	margin: 0 $container_margin;
 }
 
@@ -88,10 +88,10 @@ $class_push:		'push';		//				//
  * Align an element to the grid.
  */
 @mixin column($_columns_width, $_padding_columns:null){
-	float: left; 
+	float: left;
 	margin-right: -100%;
 	$_width_perc: element_width($_columns_width);
-    width: $_width_perc;       
+    width: $_width_perc;
 
     @if($_padding_columns != null){
     	@include push($_padding_columns);
@@ -102,7 +102,7 @@ $class_push:		'push';		//				//
  * Apply to any column to make it the last one of the current row.
  */
 @mixin column_omega(){
-	
+
 }
 
 
@@ -122,8 +122,8 @@ $class_push:		'push';		//				//
 		//$_width_perc: (column_width() + $gutter_width)*$_column_index;
 		$_width_perc: ($gutter_width + element_width($_column_index));
 	}
-	
-	margin-left: $_width_perc;       
+
+	margin-left: $_width_perc;
 }
 
 @mixin pull(){}
@@ -140,14 +140,14 @@ $class_push:		'push';		//				//
 		@include container();
 	}
 
-	/* Helper Class: Columns */ 
+	/* Helper Class: Columns */
 	@for $i from 1 through $total_columns{
 		.#{$class_column}#{$i} {
 			@include column($i)
 		}
 	}
 
-	/* Helper Class: Horizontal Position */ 
+	/* Helper Class: Horizontal Position */
 	@for $i from 0 through ($total_columns - 1){
 		.#{$class_push}#{$i} {
 			@include push($i);
@@ -173,7 +173,7 @@ $class_push:		'push';		//				//
 			}@else{
 				clear: none;
 			}
-		}	
+		}
 	}
 }
 
@@ -206,6 +206,6 @@ $class_push:		'push';		//				//
 			@if ($_current_col > $_cols_per_row){
 				$_current_col:1;
 			}
-		}	
+		}
 	}
 }
